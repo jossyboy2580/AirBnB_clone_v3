@@ -70,6 +70,18 @@ test_db_storage.py'])
 
 class TestFileStorage(unittest.TestCase):
     """Test the FileStorage class"""
+
+    @classmethod
+    def setUp(self):
+        """Setup for the tests"""
+        models.storage.reload()
+        self.session = models.storage._DBStorage__session
+
+    @classmethod
+    def tearDown(self):
+        """Destroy the fixtures"""
+        self.session.close()
+
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_returns_dict(self):
         """Test that all returns a dictionaty"""
@@ -78,11 +90,57 @@ class TestFileStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_no_class(self):
         """Test that all returns all rows when no class is passed"""
+        all_items = models.storage.all()
+        all_from_db = {}
+        for cls in classes:
+            for row in self.session.query(classes[cls]).all():
+                all_from_db[row.id] = row
+
+        self.assertEqual(all_items, all_from_db)
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_new(self):
         """test that new adds an object to the database"""
+        details = {'password': 'heiisa', 'email': 'joe@me.com'}
+        my_obj = User(**details)
+        models.storage.new(my_obj)
+        self.assertEqual(my_obj, self.session.query(User).
+                         filter(User.id == my_obj.id).first())
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_save(self):
         """Test that save properly saves objects to file.json"""
+        pass
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_get(self):
+        """Test that get retreives the correct object"""
+        details = {'password': 'heiisa', 'email': 'joe@me.com'}
+        my_obj = User(**details)
+        my_obj.save()
+        self.session.close()
+        models.storage.reload()
+        self.assertEqual(my_obj.email, models.storage.get(User, my_obj.id).
+                         email)
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_get_fake_object(self):
+        """Test that get retreives the correct object"""
+        self.assertEqual(None, models.storage.get(Place, 'fake'))
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_count_without_class(self):
+        """Test count method without a class given"""
+        count = len(models.storage.all())
+        self.assertEqual(count, models.storage.count())
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_count_with_class(self):
+        """Test count method without a class given"""
+        all_objs = models.storage.all()
+        cls = User
+        cls_count = 0
+        for item in all_objs.keys():
+            if item.split('.')[0] == cls.__name__:
+                cls_count += 1
+        self.assertEqual(cls_count, models.storage.count(cls))
