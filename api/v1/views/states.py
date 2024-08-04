@@ -42,11 +42,11 @@ def delete_state_by_id(state_id):
 def create_a_state():
     req_body = request.get_json()
     if not isinstance(req_body, dict):
-        response = jsonify({"error":"Not a JSON"})
+        response = jsonify({"error": "Not a JSON"})
         response.status_code = 400
         return response
     if 'name' not in req_body:
-        response = jsonify({"error":"Missing name"})
+        response = jsonify({"error": "Missing name"})
         response.status_code = 400
         return response
     new_state = State(**req_body)
@@ -62,7 +62,7 @@ def update_state(state_id):
         abort(404)
     req_body = request.get_json()
     if not isinstance(req_body, dict):
-        response = jsonify({"error":"Not a JSON"})
+        response = jsonify({"error": "Not a JSON"})
         response.status_code = 400
         return response
     #  add the feature of updating the state
