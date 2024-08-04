@@ -15,7 +15,7 @@ def get_all_cities_for_states(state_id):
     all_city_objects = storage.all(City)
 
     cities = [city for city in all_city_objects.values()]
-    cities_for_state = filter(lambda city: city.id == state_id, cities)
+    cities_for_state = list(filter(lambda city: city.id == state_id, cities))
     if len(cities_for_state) < 1:
         abort(404)
     state_cities = [city.to_dict() for city in cities_for_state]
