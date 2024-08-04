@@ -13,7 +13,7 @@ def get_all_states():
     """get all the states"""
     all_state_objects = storage.all(State)
 
-    states = [state.to_dict() for state in all_states_objects.values()]
+    states = [state.to_dict() for k, state in all_states_objects.values()]
     return jsonify(states)
 
 
@@ -65,4 +65,9 @@ def update_state(state_id):
         response = jsonify({"error": "Not a JSON"})
         response.status_code = 400
         return response
-    #  add the feature of updating the state
+    for key, val in req_body.values():
+        if key in ['id', 'created_at', 'updated_at']:
+            continue
+        setattr(state, key, val)
+    state.save()
+    return jsonify(state.to_dict()), 200
