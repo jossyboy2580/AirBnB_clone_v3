@@ -9,7 +9,7 @@ from models.city import City
 from models import storage
 
 
-@app_views.route('/states/<state_id>/cities/', methods=['GET'])
+@app_views.route('/states/<state_id>/cities', methods=['GET'])
 def get_all_cities_for_states(state_id):
     """get all cities for the state"""
     all_city_objects = storage.all(City)
@@ -44,7 +44,7 @@ def delete_city_by_id(city_id):
         return jsonify({})
 
 
-@app_views.route('states/<state_id>/cities/', methods=['POST'])
+@app_views.route('states/<state_id>/cities', methods=['POST'])
 def create_a_city(state_id):
     """create a city"""
     state = storage.get(State, state_id)
@@ -59,8 +59,9 @@ def create_a_city(state_id):
         response = jsonify({"error": "Missing name"})
         response.status_code = 400
         return response
+    linked_state = {'state_id': state_id}
+    req_body.update(linked_state)
     new_city = City(**req_body)
-    new_city.state_id = state_id
     new_city.save()
     return jsonify(new_city.to_dict()), 201
 
