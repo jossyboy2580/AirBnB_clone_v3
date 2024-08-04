@@ -8,12 +8,12 @@ from models.state import State
 from models import storage
 
 
-@app_views.route('/states', methods=['GET'])
+@app_views.route('/states/', methods=['GET'])
 def get_all_states():
     """get all the states"""
     all_state_objects = storage.all(State)
 
-    states = [state.to_dict() for k, state in all_states_objects.values()]
+    states = [state.to_dict() for state in all_state_objects.values()]
     return jsonify(states)
 
 
@@ -38,7 +38,7 @@ def delete_state_by_id(state_id):
         return jsonify({})
 
 
-@app_views.route('/states', methods=['POST'])
+@app_views.route('/states/', methods=['POST'])
 def create_a_state():
     req_body = request.get_json()
     if not isinstance(req_body, dict):
@@ -65,7 +65,7 @@ def update_state(state_id):
         response = jsonify({"error": "Not a JSON"})
         response.status_code = 400
         return response
-    for key, val in req_body.values():
+    for key, val in req_body.items():
         if key in ['id', 'created_at', 'updated_at']:
             continue
         setattr(state, key, val)
