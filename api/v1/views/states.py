@@ -35,6 +35,7 @@ def delete_state_by_id(state_id):
         abort(404)
     else:
         storage.delete(state)
+        storage.save()
         return jsonify({})
 
 
