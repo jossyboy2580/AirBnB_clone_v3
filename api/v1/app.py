@@ -3,7 +3,7 @@
 The entry point of our flask app
 """
 import os
-from flask import Flask
+from flask import Flask, jsonify
 from models import storage
 from api.v1.views import app_views
 
@@ -17,6 +17,11 @@ app.register_blueprint(app_views, url_prefix='/api/v1/')
 def close_storage(exception):
     """This method closes the storage"""
     storage.close()
+
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return jsonify({"error": "Not Found"}), 404
 
 
 if __name__ == '__main__':
