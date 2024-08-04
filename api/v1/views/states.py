@@ -41,6 +41,7 @@ def delete_state_by_id(state_id):
 
 @app_views.route('/states/', methods=['POST'])
 def create_a_state():
+    """create a city"""
     req_body = request.get_json()
     if not isinstance(req_body, dict):
         response = jsonify({"error": "Not a JSON"})
