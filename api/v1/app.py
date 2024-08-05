@@ -26,9 +26,7 @@ def page_not_found(error):
 
 @app.errorhandler(400)
 def handle_400_error(error):
-    response = jsonify({"error": error.description})
-    response.status_code = 400
-    return response
+    return jsonify({"error": error.description}), 400
 
 
 if __name__ == '__main__':
