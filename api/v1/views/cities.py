@@ -51,11 +51,11 @@ def create_a_city(state_id):
     state = storage.get(State, state_id)
     if not state:
         abort(404)
-    req_body = request.get_json()
-    if not isinstance(req_body, dict):
+    if request.content_type != 'application/json':
         response = jsonify({"error": "Not a JSON"})
         response.status_code = 400
         return response
+    req_body = request.get_json()
     if 'name' not in req_body:
         response = jsonify({"error": "Missing name"})
         response.status_code = 400
