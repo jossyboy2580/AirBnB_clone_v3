@@ -44,9 +44,9 @@ def create_a_state():
     """create a city"""
     req_body = request.get_json()
     if request.content_type != 'application/json':
-        abort(400, description="Not a JSON")
+        return abort(400, "Not a JSON")
     if 'name' not in req_body:
-        abort(400, description="Missing name")
+        return abort(400, "Missing name")
     new_state = State(**req_body)
     new_state.save()
     return jsonify(new_state.to_dict()), 201
@@ -60,7 +60,7 @@ def update_state(state_id):
         abort(404)
     req_body = request.get_json()
     if request.content_type != 'application/json':
-        abort(400, description="Not a JSON")
+        return abort(400, "Not a JSON")
     for key, val in req_body.items():
         if key in ['id', 'created_at', 'updated_at']:
             continue
