@@ -43,7 +43,7 @@ def delete_state_by_id(state_id):
 def create_a_state():
     """create a city"""
     req_body = request.get_json()
-    if not isinstance(req_body, dict):
+    if request.content_type != 'application/json':
         response = jsonify({"error": "Not a JSON"})
         response.status_code = 400
         return response
@@ -56,7 +56,7 @@ def create_a_state():
     return jsonify(new_state.to_dict()), 201
 
 
-@app_views.route('states/<state_id>', methods=['PUT'], strict_slashes=False)
+@app_views.route('states/<state_id>', methods=['PUT'])
 def update_state(state_id):
     """update the status of a state"""
     state = storage.get(State, state_id)
