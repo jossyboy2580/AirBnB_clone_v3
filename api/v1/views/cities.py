@@ -14,11 +14,11 @@ def get_all_cities_for_states(state_id):
     """get all cities for the state"""
     all_city_objects = storage.all(City)
 
-    cities = [city for city in all_city_objects.values()]
-    cities_for_state = list(filter(lambda city: city.id == state_id, cities))
-    if len(cities_for_state) < 1:
+    cities = [city for city in all_city_objects.values()
+              if city.state_id == state_id]
+    if len(cities) < 1:
         abort(404)
-    state_cities = [city.to_dict() for city in cities_for_state]
+    state_cities = [city.to_dict() for city in cities]
     return jsonify(state_cities)
 
 
