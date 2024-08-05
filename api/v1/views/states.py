@@ -36,10 +36,10 @@ def delete_state_by_id(state_id):
     else:
         storage.delete(state)
         storage.save()
-        return jsonify({})
+        return jsonify({}), 200
 
 
-@app_views.route('/states/', methods=['POST'], strict_slashes=False)
+@app_views.route('/states/', methods=['POST'])
 def create_a_state():
     """create a city"""
     req_body = request.get_json()
