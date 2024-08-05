@@ -54,7 +54,7 @@ def create_a_city(state_id):
     req_body = request.get_json()
     c_type = request.content_type
     if not isinstance(req_body, dict) or c_type != 'application/json':
-        abort(400, description ="Not a JSON")
+        abort(400, description="Not a JSON")
     if 'name' not in req_body:
         abort(400, description="Missing name")
     linked_state = {'state_id': state_id}
