@@ -27,7 +27,7 @@ def get_state_by_id(state_id):
         return jsonify(state.to_dict())
 
 
-@app_views.route('/states/<state_id>/', methods=['DELETE'])
+@app_views.route('/states/<state_id>', methods=['DELETE'])
 def delete_state_by_id(state_id):
     """deletes a particular state by id"""
     state = storage.get(State, state_id)
@@ -56,7 +56,7 @@ def create_a_state():
     return jsonify(new_state.to_dict()), 201
 
 
-@app_views.route('states/<state_id>', methods=['PUT'])
+@app_views.route('states/<state_id>/', methods=['PUT'])
 def update_state(state_id):
     """update the status of a state"""
     state = storage.get(State, state_id)
