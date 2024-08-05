@@ -2,7 +2,7 @@
 """
 A view for our state object
 """
-from flask import abort, jsonify, request
+from flask import abort, jsonify, request, make_response
 from api.v1.views import app_views
 from models.state import State
 from models import storage
@@ -44,9 +44,9 @@ def create_a_state():
     """create a city"""
     req_body = request.get_json()
     if request.content_type != 'application/json':
-        return abort(400, "Not a JSON")
+        abort(400, description="Not a JSON")
     if 'name' not in req_body:
-        return abort(400, "Missing name")
+        abort(400, description="Missing name")
     new_state = State(**req_body)
     new_state.save()
     return jsonify(new_state.to_dict()), 201
@@ -60,7 +60,7 @@ def update_state(state_id):
         abort(404)
     req_body = request.get_json()
     if request.content_type != 'application/json':
-        return abort(400, "Not a JSON")
+        abort(400, description="Not a JSON")
     for key, val in req_body.items():
         if key in ['id', 'created_at', 'updated_at']:
             continue

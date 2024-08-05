@@ -24,10 +24,11 @@ def page_not_found(error):
     """page not found"""
     return jsonify({"error": "Not found"}), 404
 
-"""
+
 @app.errorhandler(400)
 def handle_400_error(error):
-    return jsonify({"error": error.description}), 400"""
+    """handle all the 400 errors"""
+    return jsonify({"error": error.description}), 400
 
 
 if __name__ == '__main__':
