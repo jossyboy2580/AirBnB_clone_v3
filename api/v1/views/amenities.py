@@ -17,7 +17,7 @@ def get_all_amenities():
     return jsonify(amenities)
 
 
-@app_views.route('/amenity/<amenity_id>', strict_slashes=False)
+@app_views.route('/amenities/<amenity_id>', strict_slashes=False)
 def get_amenity_by_id(amenity_id):
     """get a paticular amenity by id"""
     amenity = storage.get(Amenity, amenity_id)
