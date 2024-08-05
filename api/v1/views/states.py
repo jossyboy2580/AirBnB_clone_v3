@@ -44,13 +44,9 @@ def create_a_state():
     """create a city"""
     req_body = request.get_json()
     if request.content_type != 'application/json':
-        response = jsonify({"error": "Not a JSON"})
-        response.status_code = 400
-        return response
+        abort(400, "Not a JSON")
     if 'name' not in req_body:
-        response = jsonify({"error": "Missing name"})
-        response.status_code = 400
-        return response
+        abort(400, "Missing name")
     new_state = State(**req_body)
     new_state.save()
     return jsonify(new_state.to_dict()), 201
