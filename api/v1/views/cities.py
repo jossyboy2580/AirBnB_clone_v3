@@ -52,8 +52,9 @@ def create_a_city(state_id):
     if not state:
         abort(404)
     req_body = request.get_json()
-    if request.content_type != 'application/json' or not 
-       isinstance(req_body, dict):
+    # c_type for content type
+    c_type = request.content_type
+    if c_type != 'application/json' or not isinstance(req_body, dict):
         response = jsonify({"error": "Not a JSON"})
         response.status_code = 400
         return response
