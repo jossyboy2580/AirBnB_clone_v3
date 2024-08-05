@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-A view for our state object
+A view for our city object
 """
 from flask import abort, jsonify, request, make_response
 from api.v1.views import app_views
