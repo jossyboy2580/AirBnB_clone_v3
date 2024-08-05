@@ -8,7 +8,7 @@ from models.state import State
 from models import storage
 
 
-@app_views.route('/states', methods=['GET'])
+@app_views.route('/states')
 def get_all_states():
     """get all the states"""
     all_state_objects = storage.all(State)
@@ -17,7 +17,7 @@ def get_all_states():
     return jsonify(states)
 
 
-@app_views.route('/states/<state_id>', methods=['GET'])
+@app_views.route('/states/<state_id>')
 def get_state_by_id(state_id):
     """get a paticular state by id"""
     state = storage.get(State, state_id)
@@ -56,7 +56,7 @@ def create_a_state():
     return jsonify(new_state.to_dict()), 201
 
 
-@app_views.route('states/<state_id>/', methods=['PUT'])
+@app_views.route('states/<state_id>', methods=['PUT'])
 def update_state(state_id):
     """update the status of a state"""
     state = storage.get(State, state_id)
