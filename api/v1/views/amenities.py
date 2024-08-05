@@ -43,7 +43,7 @@ def delete_amenity_by_id(amenity_id):
 def create_an_amenity():
     """create an amenity"""
     req_body = request.get_json()
-    if request.content_type != 'application/json':
+    if request.content_type != 'application/json' or not request.is_json:
         abort(400, description="Not a JSON")
     if 'name' not in req_body:
         abort(400, description="Missing name")
@@ -59,7 +59,7 @@ def update_amenity(amenity_id):
     if not amenity:
         abort(404)
     req_body = request.get_json()
-    if request.content_type != 'application/json':
+    if request.content_type != 'application/json' or not request.is_json:
         abort(400, description="Not a JSON")
     for key, val in req_body.items():
         if key in ['id', 'created_at', 'updated_at']:
