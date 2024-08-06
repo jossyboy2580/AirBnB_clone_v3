@@ -20,7 +20,7 @@ def get_all_places_with_city(city_id):
 
     places = [place.to_dict() for place in all_places.values()
               if place.city_id == city_id]
-    if len(places) < 1:
+    if len(places) < 0:
         abort(404)
     return jsonify(places)
 
