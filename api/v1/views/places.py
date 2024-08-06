@@ -45,7 +45,8 @@ def delete_place_by_id(place_id):
         return jsonify({}), 200
 
 
-@app_views.route('/cities/<city_id>/places', methods=['POST'], strict_slashes=False)
+@app_views.route('/cities/<city_id>/places', methods=['POST'],
+                 strict_slashes=False)
 def create_a_place(city_id):
     """create a plsce"""
     req_body = request.get_json()
@@ -61,7 +62,7 @@ def create_a_place(city_id):
     linked_user = storage.get(User, req_body['user_id'])
     if not linked_user:
         abort(404)
-    dict_extension = {'city_id': city_id, 'user_id':req_body['user_id']}
+    dict_extension = {'city_id': city_id, 'user_id': req_body['user_id']}
     req_body.update(dict_extension)
     new_place = Place(**req_body)
     new_place.save()
