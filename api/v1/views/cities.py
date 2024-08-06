@@ -16,7 +16,7 @@ def get_all_cities_for_states(state_id):
 
     cities = [city for city in all_city_objects.values()
               if city.state_id == state_id]
-    if len(cities) < 1:
+    if len(cities) == 0:
         abort(404)
     state_cities = [city.to_dict() for city in cities]
     return jsonify(state_cities)
@@ -51,10 +51,10 @@ def create_a_city(state_id):
     state = storage.get(State, state_id)
     if not state:
         abort(404)
-    req_body = request.get_json()
     c_type = request.content_type
     if not request.is_json or c_type != 'application/json':
         abort(400, description="Not a JSON")
+    req_body = request.get_json()
     if 'name' not in req_body:
         response = make_response(jsonify({"error": "Missing name"}), 400)
         abort(400, description="Missing name")
@@ -74,10 +74,9 @@ def update_city(city_id):
     city = storage.get(City, city_id)
     if not city:
         abort(404)
-    req_body = request.get_json()
-    #  if not isinstance(req_body, dict):
-    if request.content_type != 'application/json':
+    if not request.is_json or request.content_type != 'application/json':
         abort(400, description="Not a JSON")
+    req_body = request.get_json()
     for key, val in req_body.items():
         if key in ['id', 'created_at', 'updated_at']:
             continue
