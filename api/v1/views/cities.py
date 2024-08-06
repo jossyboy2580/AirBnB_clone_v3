@@ -13,6 +13,9 @@ from models import storage
 def get_all_cities_for_states(state_id):
     """get all cities for the state"""
     all_city_objects = storage.all(City)
+    linked_state = storage.get(Statei, state_id)
+    if not linked_state:
+        abort(404)
 
     cities = [city for city in all_city_objects.values()
               if city.state_id == state_id]
