@@ -52,10 +52,10 @@ def delete_place_by_id(place_id):
                  strict_slashes=False)
 def create_a_place(city_id):
     """create a plsce"""
-    req_body = request.get_json()
     if request.content_type != 'application/json' or not request.is_json:
         abort(400, description="Not a JSON")
-    if 'email' not in req_body:
+    req_body = request.get_json()
+    if 'name' not in req_body:
         abort(400, description="Missing name")
     if 'user_id' not in req_body:
         abort(400, description="Missing user_id")
@@ -78,9 +78,9 @@ def update_place(place_id):
     place = storage.get(Place, place_id)
     if not place:
         abort(404)
-    req_body = request.get_json()
     if not request.is_json:
         abort(400, description="Not a JSON")
+    req_body = request.get_json()
     for key, val in req_body.items():
         if key in ['id', 'user_id', 'city_id', 'created_at', 'updated_at']:
             continue
