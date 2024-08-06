@@ -14,6 +14,9 @@ from models import storage
 def get_all_places_with_city(city_id):
     """get all places for the city"""
     all_places = storage.all(Place)
+    linked_city =storage_get(City, city_id)
+    if not linked_city:
+        abort(404)
 
     places = [place.to_dict() for place in all_places.values()
               if place.city_id == city_id]
