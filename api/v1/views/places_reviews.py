@@ -6,6 +6,7 @@ places
 from flask import abort, jsonify, request
 from api.v1.views import app_views
 from models.review import Review
+from models.user import User
 from models.place import Place
 from models import storage
 
@@ -65,7 +66,7 @@ def create_a_review(place_id):
     place = storage.get(Place, place_id)
     if not place:
         abort(404)
-    user = storage.get(User, user_id)
+    user = storage.get(User, req_body['user_id'])
     if not user:
         abort(404)
     extension = {"user_id": user.id, "place_id": place.id}
