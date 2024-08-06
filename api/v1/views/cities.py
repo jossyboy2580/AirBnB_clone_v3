@@ -53,13 +53,16 @@ def create_a_city(state_id):
         abort(404)
     req_body = request.get_json()
     c_type = request.content_type
-    if not isinstance(req_body, dict) or c_type != 'application/json':
+    if not request.is_json or c_type != 'application/json':
         abort(400, description="Not a JSON")
     if 'name' not in req_body:
         response = make_response(jsonify({"error": "Missing name"}), 400)
         abort(400, description="Missing name")
-    linked_state = {'state_id': state_id}
-    req_body.update(linked_state)
+    linked_state = storage.get(State, state_id)
+    if not linked_state:
+        abort(404)
+    linked_state_dict = {'state_id': state_id}
+    req_body.update(linked_state_dict)
     new_city = City(**req_body)
     new_city.save()
     return jsonify(new_city.to_dict()), 201

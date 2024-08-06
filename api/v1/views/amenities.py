@@ -11,9 +11,9 @@ from models import storage
 @app_views.route('/amenities', strict_slashes=False)
 def get_all_amenities():
     """get all the amenities"""
-    all_amenity_objects = storage.all(Amenity)
+    all_amenities = storage.all(Amenity)
 
-    amenities = [amenity.to_dict() for amenity in all_amenity_objects.values()]
+    amenities = [amenity.to_dict() for amenity in all_amenities.values()]
     return jsonify(amenities)
 
 
@@ -59,7 +59,7 @@ def update_amenity(amenity_id):
     if not amenity:
         abort(404)
     req_body = request.get_json()
-    if request.content_type != 'application/json' or not request.is_json:
+    if not request.is_json:
         abort(400, description="Not a JSON")
     for key, val in req_body.items():
         if key in ['id', 'created_at', 'updated_at']:
