@@ -13,7 +13,7 @@ from models import storage
 def get_all_cities_for_states(state_id):
     """get all cities for the state"""
     all_city_objects = storage.all(City)
-    linked_state = storage.get(Statei, state_id)
+    linked_state = storage.get(State, state_id)
     if not linked_state:
         abort(404)
 
