@@ -19,7 +19,7 @@ def get_all_cities_for_states(state_id):
 
     cities = [city for city in all_city_objects.values()
               if city.state_id == state_id]
-    if len(cities) == 0:
+    if len(cities) < 0:
         abort(404)
     state_cities = [city.to_dict() for city in cities]
     return jsonify(state_cities)
