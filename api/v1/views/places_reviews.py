@@ -24,7 +24,9 @@ def get_reviews_for_place(place_id):
             review.to_dict() for review in all_reviews if
             review.place_id == place_id
             ]
-    return review_filter_for_place
+    if len(review_filter_for_place) < 0:
+        abort(404)
+    return jsonify(review_filter_for_place)
 
 
 @app_views.route('/reviews/<review_id>', strict_slashes=False)
