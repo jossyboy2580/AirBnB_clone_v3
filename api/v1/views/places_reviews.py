@@ -23,7 +23,7 @@ def get_reviews_for_place(place_id):
     all_reviews = storage.all(Review)
     review_filter_for_place = [
             review.to_dict() for review in all_reviews if
-            review.place_id == place_id
+            review.place_id == place.id
             ]
     if len(review_filter_for_place) < 0:
         abort(404)

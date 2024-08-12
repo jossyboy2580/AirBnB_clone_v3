@@ -19,7 +19,7 @@ def get_all_places_with_city(city_id):
         abort(404)
 
     places = [place.to_dict() for place in all_places.values()
-              if place.city_id == city_id]
+            if place.city_id == city_id]
     if len(places) < 0:
         abort(404)
     return jsonify(places)
@@ -48,7 +48,7 @@ def delete_place_by_id(place_id):
 
 
 @app_views.route('/cities/<city_id>/places', methods=['POST'],
-                 strict_slashes=False)
+        strict_slashes=False)
 def create_a_place(city_id):
     """create a plsce"""
     if request.content_type != 'application/json' or not request.is_json:
@@ -86,3 +86,48 @@ def update_place(place_id):
         setattr(place, key, val)
     place.save()
     return jsonify(place.to_dict()), 200
+
+
+@app_views.route('/places_search', methods=['POST'], strict_slashes=False)
+def search_place():
+    """Endpoint to return all the places"""
+    if not request.is_json:
+        abort(400, description='Not a JSON')
+    req_body = request.get_json()
+    all_places = storage.all(Place)
+    all_cities = storage.all(City)
+    cities_in_request = []
+    result = all_places
+
+    # Get the value for each of the possible keys
+    # if it returns None then pass
+    state_ids = req_body.get('states')
+    if state_ids:
+        for city in all_cities:
+            if city.state_id in state_ids:
+                cities_in_request.append(city)
+    city_ids = req_body.get('cities')
+    if city_ids:
+        for city in all_cities:
+            if city.id in city_ids:
+                cities_in_request.append(city)
+    seen = set()
+    unique_cities_in_request = []
+    for city in cities_in_request:
+        if city.id in seen:
+            continue
+        seen.add(city.id)
+        unique_cities_in_request.append(city)
+    amenity_ids = req_body.get('amenities')
+    if amenity_ids:
+        result = []
+        if len(cities_in_request) >= 1:
+            cities_in_request_ids = [city.id
+                                     for city in unique_cities_in_request]
+            all_places = [place for place in all_places
+                          if place.city_id in cities_in_request_ids]
+            for place in all_places:
+                if sorted(place.amenity_ids) == sorted(amenity_ids):
+                    result.append(place)
+    result = [all_places[place].to_dict() for place in result]
+    return jsonify(result), 200
